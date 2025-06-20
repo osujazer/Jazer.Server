@@ -30,4 +30,10 @@ public class User
     public required DateTimeOffset CreatedAt { get; init; }
 
     public IReadOnlyCollection<RefreshToken> RefreshTokens { get; init; } = null!;
+    
+    public IReadOnlyCollection<UserGroup> UserGroups { get; init; } = null!;
+    
+    public IReadOnlyCollection<UserGroupHistory> UserGroupHistories { get; init; } = null!;
+    
+    public IReadOnlyCollection<UserGroupHistory> UserGroupHistoriesAssigned { get; init; } = null!;
 }
