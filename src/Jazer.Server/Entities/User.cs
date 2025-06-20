@@ -36,4 +36,8 @@ public class User
     public IReadOnlyCollection<UserGroupHistory> UserGroupHistories { get; init; } = null!;
     
     public IReadOnlyCollection<UserGroupHistory> UserGroupHistoriesAssigned { get; init; } = null!;
+    
+    public IReadOnlyCollection<UserInfraction> UserInfractions { get; init; } = null!;
+
+    public IReadOnlyCollection<UserInfraction> UserInfractionsAssigned { get; init; } = null!;
 }

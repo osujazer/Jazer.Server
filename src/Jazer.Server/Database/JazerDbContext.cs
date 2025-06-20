@@ -15,6 +15,8 @@ public class JazerDbContext(DbContextOptions<JazerDbContext> options) : DbContex
     
     public DbSet<UserGroupHistory> UserGroupHistories { get; init; }
 
+    public DbSet<UserInfraction> UserInfractions { get; init; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<RefreshToken>()
@@ -52,6 +54,19 @@ public class JazerDbContext(DbContextOptions<JazerDbContext> options) : DbContex
             .WithMany(user => user.UserGroupHistoriesAssigned)
             .HasPrincipalKey(user => user.Id)
             .HasForeignKey(userGroupHistory => userGroupHistory.AssignedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<UserInfraction>()
+            .HasOne(userInfraction => userInfraction.User)
+            .WithMany(user => user.UserInfractions)
+            .HasPrincipalKey(user => user.Id)
+            .HasForeignKey(userInfraction => userInfraction.UserId);
+        
+        modelBuilder.Entity<UserInfraction>()
+            .HasOne(userInfraction => userInfraction.AssignedByUser)
+            .WithMany(user => user.UserInfractionsAssigned)
+            .HasPrincipalKey(user => user.Id)
+            .HasForeignKey(userInfraction => userInfraction.AssignedByUserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
