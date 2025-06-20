@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jazer.Server.Repositories;
 
-public sealed class UserRepository(JazerDbContext dbContext) : IUserRepository
+internal sealed class UserRepository(JazerDbContext dbContext) : IUserRepository
 {
     public async Task<int> Add(string username, string email, string hashedPassword, CancellationToken cancellationToken = default)
     {
@@ -35,5 +35,29 @@ public sealed class UserRepository(JazerDbContext dbContext) : IUserRepository
         return dbContext.Users
             .AsNoTracking()
             .AnyAsync(x => EF.Functions.ILike(x.Email,email), cancellationToken);
+    }
+
+    public Task<User?> FindByUsername(string username, CancellationToken cancellationToken = default)
+    {
+        return dbContext.Users
+            .AsNoTracking()
+            .Where(x => EF.Functions.ILike(x.Username, username))
+            .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<User?> FindByEmail(string email, CancellationToken cancellationToken = default)
+    {
+        return dbContext.Users
+            .AsNoTracking()
+            .Where(x => EF.Functions.ILike(x.Email, email))
+            .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<User?> FindById(int id, CancellationToken cancellationToken = default)
+    {
+        return dbContext.Users
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .SingleOrDefaultAsync(cancellationToken);
     }
 }

@@ -3,6 +3,7 @@ using Jazer.Server.Attributes;
 using Jazer.Server.Errors;
 using Jazer.Server.Models;
 using Jazer.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,46 @@ public class UserController : ControllerBase
         {
             { IsFailed: true } => TypedResults.BadRequest(new ErrorResponse(result.Errors)),
             { IsSuccess: true } => TypedResults.Created(uri: (string?)null, result.Value),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    [HttpPost("login")]
+    [AnonymousOnly]
+    public async Task<Results<Ok<LoginUserResponse>, NotFound, BadRequest<ErrorResponse>>> LoginUser(
+        [FromBody] LoginUserRequest request,
+        [FromServices] IUserService userService,
+        CancellationToken cancellationToken)
+    {
+        var result = await userService.Login(request, cancellationToken);
+
+        if (result.HasError<NotFoundError>())
+            return TypedResults.NotFound();
+        
+        return result switch
+        {
+            { IsFailed: true } => TypedResults.BadRequest(new ErrorResponse(result.Errors)),
+            { IsSuccess: true } => TypedResults.Ok(result.Value),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    [HttpGet("{userId:int}")]
+    [Authorize]
+    public async Task<Results<Ok<User>, NotFound, BadRequest, BadRequest<ErrorResponse>>> GetUser(
+        [FromRoute] int userId,
+        [FromServices] IUserService userService,
+        CancellationToken cancellationToken)
+    {
+        var result = await userService.FindById(userId, cancellationToken);
+        
+        if (result.HasError<NotFoundError>())
+            return TypedResults.NotFound();
+        
+        return result switch
+        {
+            { IsFailed: true } => TypedResults.BadRequest(new ErrorResponse(result.Errors)),
+            { IsSuccess: true } => TypedResults.Ok(result.Value),
             _ => throw new InvalidOperationException()
         };
     }

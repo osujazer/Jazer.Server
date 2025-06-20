@@ -1,20 +1,30 @@
 ﻿using FluentResults;
 using FluentValidation;
+using Jazer.Server.Authentication;
+using Jazer.Server.Config;
 using Jazer.Server.Cryptography;
 using Jazer.Server.Errors;
 using Jazer.Server.Models;
 using Jazer.Server.Repositories;
+using Mapster;
+using Microsoft.Extensions.Options;
 
 namespace Jazer.Server.Services;
 
 public sealed class UserService(
     IUserRepository userRepository,
+    IRefreshTokenRepository refreshTokenRepository,
     IPasswordHasher passwordHasher,
-    IValidator<RegisterUserRequest> validator) : IUserService
+    TokenProvider tokenProvider,
+    IValidator<RegisterUserRequest> registerUserRequestValidator,
+    IValidator<LoginUserRequest> loginUserRequestValidator,
+    IOptions<Settings> options) : IUserService
 {
+    private readonly Settings _settings = options.Value;
+
     public async Task<Result<int>> RegisterUser(RegisterUserRequest request, CancellationToken cancellationToken = default)
     {
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await registerUserRequestValidator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
             return new ValidationError(validationResult.Errors);
@@ -32,5 +42,47 @@ public sealed class UserService(
             cancellationToken);
 
         return userId;
+    }
+
+    public async Task<Result<LoginUserResponse>> Login(LoginUserRequest request, CancellationToken cancellationToken = default)
+    {
+        var validationResult = await loginUserRequestValidator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            return new ValidationError(validationResult.Errors);
+
+        var user = await userRepository.FindByUsername(request.Username, cancellationToken)
+                   ?? await userRepository.FindByEmail(request.Username, cancellationToken);
+
+        if (user is null)
+            return NotFoundError.UserNotFound;
+
+        if (!passwordHasher.Verify(request.Password, user.HashedPassword))
+            return NotFoundError.UserNotFound;
+
+        var accessToken = tokenProvider.Create(user);
+        var refreshToken = tokenProvider.GenerateRefreshToken();
+
+        await refreshTokenRepository.Add(
+            refreshToken,
+            user.Id,
+            DateTimeOffset.UtcNow.AddDays(_settings.RefreshTokenExpiryDays),
+            cancellationToken);
+
+        return new LoginUserResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+        };
+    }
+
+    public async Task<Result<User>> FindById(int id, CancellationToken cancellationToken = default)
+    {
+        var user = await userRepository.FindById(id, cancellationToken);
+
+        if (user is null)
+            return NotFoundError.UserNotFound;
+
+        return user.Adapt<User>();
     }
 }

@@ -24,4 +24,7 @@ public class Settings
     
     [Required]
     public required string JwtAudience { get; init; }
+    
+    [Required]
+    public required int RefreshTokenExpiryDays { get; init; }
 }

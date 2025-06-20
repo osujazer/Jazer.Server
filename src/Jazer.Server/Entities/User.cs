@@ -28,4 +28,6 @@ public class User
     
     [Column("created_at")]
     public required DateTimeOffset CreatedAt { get; init; }
+
+    public IReadOnlyCollection<RefreshToken> RefreshTokens { get; init; } = null!;
 }

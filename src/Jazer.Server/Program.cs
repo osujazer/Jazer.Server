@@ -1,12 +1,14 @@
 using System.Text;
 using Asp.Versioning;
 using FluentValidation;
+using Jazer.Server.Authentication;
 using Jazer.Server.Config;
 using Jazer.Server.Cryptography;
 using Jazer.Server.Database;
 using Jazer.Server.Handlers;
 using Jazer.Server.Repositories;
 using Jazer.Server.Services;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -38,6 +40,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
+builder.Services.AddMapster();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 builder.Services.AddApiVersioning(options =>
@@ -67,10 +70,12 @@ builder.Services.AddDbContext<JazerDbContext>(options =>
     options.UseNpgsql(settings.DatabaseConnectionString));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
+builder.Services.AddSingleton<TokenProvider>();
 
 var app = builder.Build();
 
