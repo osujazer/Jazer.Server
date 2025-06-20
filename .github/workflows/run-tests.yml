@@ -1,0 +1,29 @@
+name: Run Tests
+
+on:
+  workflow_dispatch:
+  push:
+
+env:
+  DOTNET_VERSION: "9.x"
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ./Jazer.Server.sln
+
+      - name: Build
+        run: dotnet build ./Jazer.Server.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./Jazer.Server.sln --configuration Release --no-restore --no-build

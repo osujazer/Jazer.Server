@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CFB9B4E1-9D82-42C3-9AB3-6AF4BF9C88FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jazer.Server", "src\Jazer.Server\Jazer.Server.csproj", "{BD1793A2-FC92-4CE6-BF4F-9278DC2F5104}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A6F97F6A-E94A-4D1F-8D1A-E49AC3BE1A53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jazer.Server.Tests.Integration", "tests\Jazer.Server.Tests.Integration\Jazer.Server.Tests.Integration.csproj", "{B9DF5349-85ED-46EB-9F04-DAAEF6075E5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD1793A2-FC92-4CE6-BF4F-9278DC2F5104} = {CFB9B4E1-9D82-42C3-9AB3-6AF4BF9C88FC}
+		{B9DF5349-85ED-46EB-9F04-DAAEF6075E5A} = {A6F97F6A-E94A-4D1F-8D1A-E49AC3BE1A53}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD1793A2-FC92-4CE6-BF4F-9278DC2F5104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD1793A2-FC92-4CE6-BF4F-9278DC2F5104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD1793A2-FC92-4CE6-BF4F-9278DC2F5104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD1793A2-FC92-4CE6-BF4F-9278DC2F5104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9DF5349-85ED-46EB-9F04-DAAEF6075E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9DF5349-85ED-46EB-9F04-DAAEF6075E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9DF5349-85ED-46EB-9F04-DAAEF6075E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9DF5349-85ED-46EB-9F04-DAAEF6075E5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
