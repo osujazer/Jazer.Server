@@ -1,5 +1,6 @@
 using System.Text;
 using Asp.Versioning;
+using FluentValidation;
 using Jazer.Server.Config;
 using Jazer.Server.Cryptography;
 using Jazer.Server.Database;
@@ -37,6 +38,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 builder.Services.AddApiVersioning(options =>
 {

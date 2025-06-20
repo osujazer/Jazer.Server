@@ -1,27 +1,33 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Jazer.Server.Cryptography;
 using Jazer.Server.Errors;
+using Jazer.Server.Models;
 using Jazer.Server.Repositories;
 
 namespace Jazer.Server.Services;
 
 public sealed class UserService(
     IUserRepository userRepository,
-    IPasswordHasher passwordHasher) : IUserService
+    IPasswordHasher passwordHasher,
+    IValidator<RegisterUserRequest> validator) : IUserService
 {
-    public async Task<Result<int>> RegisterUser(string username, string email, string password, CancellationToken cancellationToken = default)
+    public async Task<Result<int>> RegisterUser(RegisterUserRequest request, CancellationToken cancellationToken = default)
     {
-        // TODO: validation
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (await userRepository.UsernameExists(username, cancellationToken) ||
-            await userRepository.EmailExists(email, cancellationToken))
+        if (!validationResult.IsValid)
+            return new ValidationError(validationResult.Errors);
+
+        if (await userRepository.UsernameExists(request.Username, cancellationToken) ||
+            await userRepository.EmailExists(request.Email, cancellationToken))
             return AlreadyExistsError.UserAlreadyExists;
 
-        var hashedPassword = passwordHasher.Hash(password);
+        var hashedPassword = passwordHasher.Hash(request.Password);
 
         var userId = await userRepository.Add(
-            username,
-            email,
+            request.Username,
+            request.Email,
             hashedPassword,
             cancellationToken);
 

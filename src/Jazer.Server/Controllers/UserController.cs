@@ -20,11 +20,7 @@ public class UserController : ControllerBase
         [FromServices] IUserService userService,
         CancellationToken cancellationToken)
     {
-        var result = await userService.RegisterUser(
-            request.Username,
-            request.Email,
-            request.Password,
-            cancellationToken);
+        var result = await userService.RegisterUser(request, cancellationToken);
 
         if (result.HasError<AlreadyExistsError>())
             return TypedResults.Conflict();
