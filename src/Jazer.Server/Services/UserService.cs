@@ -18,6 +18,7 @@ public sealed class UserService(
     TokenProvider tokenProvider,
     IValidator<RegisterUserRequest> registerUserRequestValidator,
     IValidator<LoginUserRequest> loginUserRequestValidator,
+    IValidator<LoginUserWithRefreshTokenRequest> loginUserWithRefreshTokenRequestValidator,
     IOptions<Settings> options) : IUserService
 {
     private readonly Settings _settings = options.Value;
@@ -74,6 +75,35 @@ public sealed class UserService(
             AccessToken = token.AccessToken,
             RefreshToken = refreshToken,
             ExpiresAt = token.ExpiresAt,
+        };
+    }
+
+    public async Task<Result<LoginUserResponse>> LoginWithRefreshToken(LoginUserWithRefreshTokenRequest request, CancellationToken cancellationToken = default)
+    {
+        var validationResult = await loginUserWithRefreshTokenRequestValidator.ValidateAsync(request, cancellationToken);
+        
+        if (!validationResult.IsValid)
+            return new ValidationError(validationResult.Errors);
+
+        var refreshToken = await refreshTokenRepository.FindByToken(request.RefreshToken, cancellationToken);
+        
+        if (refreshToken is null || refreshToken.ExpiresAt < DateTimeOffset.UtcNow)
+            return NotFoundError.RefreshTokenNotFound;
+
+        var accessToken = tokenProvider.Create(refreshToken.User);
+        var newRefreshToken = tokenProvider.GenerateRefreshToken();
+        
+        await refreshTokenRepository.UpdateRefreshToken(
+            refreshToken.Id,
+            newRefreshToken,
+            DateTimeOffset.UtcNow.AddDays(_settings.RefreshTokenExpiryDays),
+            cancellationToken);
+
+        return new LoginUserResponse
+        {
+            AccessToken = accessToken.AccessToken,
+            RefreshToken = newRefreshToken,
+            ExpiresAt = accessToken.ExpiresAt,
         };
     }
 

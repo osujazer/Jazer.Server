@@ -53,6 +53,25 @@ public class UserController : ControllerBase
             _ => throw new InvalidOperationException()
         };
     }
+    
+    [HttpPost("login-refresh")]
+    public async Task<Results<Ok<LoginUserResponse>, NotFound, BadRequest<ErrorResponse>>> LoginUserWithRefreshToken(
+        [FromBody] LoginUserWithRefreshTokenRequest request,
+        [FromServices] IUserService userService,
+        CancellationToken cancellationToken)
+    {
+        var result = await userService.LoginWithRefreshToken(request, cancellationToken);
+
+        if (result.HasError<NotFoundError>())
+            return TypedResults.NotFound();
+        
+        return result switch
+        {
+            { IsFailed: true } => TypedResults.BadRequest(new ErrorResponse(result.Errors)),
+            { IsSuccess: true } => TypedResults.Ok(result.Value),
+            _ => throw new InvalidOperationException()
+        };
+    }
 
     [HttpGet("{userId:int}")]
     [Authorize]
