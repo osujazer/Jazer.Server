@@ -10,4 +10,6 @@ public interface IUserService
     Task<Result<LoginUserResponse>> Login(LoginUserRequest request, CancellationToken cancellationToken = default);
     
     Task<Result<User>> FindById(int id, CancellationToken cancellationToken = default);
+    
+    Task<OwnUser> GetOwnUser(int id, CancellationToken cancellationToken = default);
 }

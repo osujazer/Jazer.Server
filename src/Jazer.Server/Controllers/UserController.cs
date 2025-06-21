@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Jazer.Server.Attributes;
 using Jazer.Server.Errors;
+using Jazer.Server.Extensions;
 using Jazer.Server.Models;
 using Jazer.Server.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -72,5 +73,15 @@ public class UserController : ControllerBase
             { IsSuccess: true } => TypedResults.Ok(result.Value),
             _ => throw new InvalidOperationException()
         };
+    }
+
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<Ok<OwnUser>> GetMe(
+        [FromServices] IUserService userService)
+    {
+        var ownUser = await userService.GetOwnUser(User.GetUserId());
+        
+        return TypedResults.Ok(ownUser);
     }
 }

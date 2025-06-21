@@ -86,4 +86,11 @@ public sealed class UserService(
 
         return user.Adapt<User>();
     }
+
+    public async Task<OwnUser> GetOwnUser(int id, CancellationToken cancellationToken = default)
+    {
+        var user = await userRepository.FindById(id, cancellationToken);
+
+        return user.Adapt<OwnUser>();
+    }
 }
