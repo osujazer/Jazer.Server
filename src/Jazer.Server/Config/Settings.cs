@@ -27,4 +27,13 @@ public class Settings
     
     [Required]
     public required int RefreshTokenExpiryDays { get; init; }
+    
+    [Required]
+    public required string S3AccessKey { get; init; }
+    
+    [Required]
+    public required string S3SecretKey { get; init; }
+    
+    [Required]
+    public required string S3BucketName { get; init; }
 }

@@ -1,6 +1,9 @@
 using System.Text;
 using Asp.Versioning;
 using FluentValidation;
+using Genbox.SimpleS3.Core.Common.Authentication;
+using Genbox.SimpleS3.Extensions.Wasabi;
+using Genbox.SimpleS3.Wasabi.Extensions;
 using Jazer.Server.Authentication;
 using Jazer.Server.Config;
 using Jazer.Server.Cryptography;
@@ -69,10 +72,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddDbContext<JazerDbContext>(options =>
     options.UseNpgsql(settings.DatabaseConnectionString));
 
+builder.Services.AddWasabi(config =>
+{
+    config.Region = WasabiRegion.EuCentral2;
+    config.Credentials = new StringAccessKey(settings.S3AccessKey, settings.S3SecretKey);
+});
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IStorageService, WasabiStorageService>();
+builder.Services.AddScoped<IAvatarService, AvatarService>();
 
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<TokenProvider>();
