@@ -15,7 +15,7 @@ public class TokenProvider(IOptions<Settings> options)
 
     private readonly Settings _settings = options.Value;
     
-    public string Create(User user)
+    public Token Create(User user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.JwtSecretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -37,11 +37,15 @@ public class TokenProvider(IOptions<Settings> options)
 
         var token = handler.CreateToken(tokenDescriptor);
 
-        return token;
+        return new Token(
+            token,
+            new DateTimeOffset(tokenDescriptor.Expires!.Value, TimeSpan.Zero));
     }
 
     public string GenerateRefreshToken()
     {
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(RefreshTokenSize));
     }
+
+    public record Token(string AccessToken, DateTimeOffset ExpiresAt);
 }

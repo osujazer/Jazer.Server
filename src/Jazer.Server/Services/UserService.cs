@@ -60,7 +60,7 @@ public sealed class UserService(
         if (!passwordHasher.Verify(request.Password, user.HashedPassword))
             return NotFoundError.UserNotFound;
 
-        var accessToken = tokenProvider.Create(user);
+        var token = tokenProvider.Create(user);
         var refreshToken = tokenProvider.GenerateRefreshToken();
 
         await refreshTokenRepository.Add(
@@ -71,8 +71,9 @@ public sealed class UserService(
 
         return new LoginUserResponse
         {
-            AccessToken = accessToken,
+            AccessToken = token.AccessToken,
             RefreshToken = refreshToken,
+            ExpiresAt = token.ExpiresAt,
         };
     }
 
