@@ -36,7 +36,6 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    [AnonymousOnly]
     public async Task<Results<Ok<LoginUserResponse>, NotFound, BadRequest<ErrorResponse>>> LoginUser(
         [FromBody] LoginUserRequest request,
         [FromServices] IUserService userService,
