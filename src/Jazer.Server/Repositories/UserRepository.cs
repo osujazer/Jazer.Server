@@ -59,6 +59,8 @@ internal sealed class UserRepository(JazerDbContext dbContext) : IUserRepository
         return dbContext.Users
             .AsNoTracking()
             .Where(x => x.Id == id)
+            .Include(x => x.UserStatistics)
+            .Include(x => x.UserPeakRank)
             .SingleOrDefaultAsync(cancellationToken);
     }
 }
