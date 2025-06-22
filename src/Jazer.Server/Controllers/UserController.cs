@@ -36,15 +36,15 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<Results<Ok<LoginUserResponse>, NotFound, BadRequest<ErrorResponse>>> LoginUser(
+    public async Task<Results<Ok<LoginUserResponse>, UnauthorizedHttpResult, BadRequest<ErrorResponse>>> LoginUser(
         [FromBody] LoginUserRequest request,
         [FromServices] IUserService userService,
         CancellationToken cancellationToken)
     {
         var result = await userService.Login(request, cancellationToken);
 
-        if (result.HasError<NotFoundError>())
-            return TypedResults.NotFound();
+        if (result.HasError<AuthenticationError>())
+            return TypedResults.Unauthorized();
         
         return result switch
         {
@@ -55,15 +55,15 @@ public class UserController : ControllerBase
     }
     
     [HttpPost("login-refresh")]
-    public async Task<Results<Ok<LoginUserResponse>, NotFound, BadRequest<ErrorResponse>>> LoginUserWithRefreshToken(
+    public async Task<Results<Ok<LoginUserResponse>, UnauthorizedHttpResult, BadRequest<ErrorResponse>>> LoginUserWithRefreshToken(
         [FromBody] LoginUserWithRefreshTokenRequest request,
         [FromServices] IUserService userService,
         CancellationToken cancellationToken)
     {
         var result = await userService.LoginWithRefreshToken(request, cancellationToken);
 
-        if (result.HasError<NotFoundError>())
-            return TypedResults.NotFound();
+        if (result.HasError<AuthenticationError>())
+            return TypedResults.Unauthorized();
         
         return result switch
         {

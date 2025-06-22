@@ -56,10 +56,10 @@ public sealed class UserService(
                    ?? await userRepository.FindByEmail(request.Username, cancellationToken);
 
         if (user is null)
-            return NotFoundError.UserNotFound;
+            return AuthenticationError.InvalidCredentials;
 
         if (!passwordHasher.Verify(request.Password, user.HashedPassword))
-            return NotFoundError.UserNotFound;
+            return AuthenticationError.InvalidCredentials;
 
         var token = tokenProvider.Create(user);
         var refreshToken = tokenProvider.GenerateRefreshToken();
@@ -88,7 +88,7 @@ public sealed class UserService(
         var refreshToken = await refreshTokenRepository.FindByToken(request.RefreshToken, cancellationToken);
         
         if (refreshToken is null || refreshToken.ExpiresAt < DateTimeOffset.UtcNow)
-            return NotFoundError.RefreshTokenNotFound;
+            return AuthenticationError.InvalidCredentials;
 
         var accessToken = tokenProvider.Create(refreshToken.User);
         var newRefreshToken = tokenProvider.GenerateRefreshToken();
