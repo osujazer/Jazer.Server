@@ -8,6 +8,7 @@ using Jazer.Server.Authentication;
 using Jazer.Server.Config;
 using Jazer.Server.Cryptography;
 using Jazer.Server.Database;
+using Jazer.Server.Extensions;
 using Jazer.Server.Handlers;
 using Jazer.Server.Repositories;
 using Jazer.Server.Services;
@@ -44,6 +45,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
 builder.Services.AddMapster();
+builder.Services.RegisterMapsterConfiguration();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 builder.Services.AddApiVersioning(options =>
