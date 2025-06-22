@@ -12,4 +12,7 @@ public class User
     
     [JsonPropertyName("created_at")]
     public required DateTimeOffset CreatedAt { get; init; }
+    
+    [JsonPropertyName("country_code")]
+    public required string CountryCode { get; init; }
 }

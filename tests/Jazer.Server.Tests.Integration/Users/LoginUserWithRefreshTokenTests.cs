@@ -68,7 +68,8 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
                 Username = username,
                 Email = "expired-token@gmail.com",
                 Password = "some-password",
-            });
+            },
+            country: "GB");
 
         await _refreshTokenRepository.Add(
             refreshToken,
@@ -101,7 +102,8 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
                 Username = username,
                 Email = "valid-token@gmail.com",
                 Password = "some-password",
-            });
+            },
+            country: "GB");
 
         await _refreshTokenRepository.Add(
             refreshToken,
@@ -133,7 +135,8 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
                 Username = username,
                 Email = "updated-in-db@gmail.com",
                 Password = "some-password",
-            });
+            },
+            country: "GB");
 
         await _refreshTokenRepository.Add(
             refreshToken,

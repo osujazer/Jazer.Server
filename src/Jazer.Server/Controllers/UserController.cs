@@ -22,7 +22,9 @@ public class UserController : ControllerBase
         [FromServices] IUserService userService,
         CancellationToken cancellationToken)
     {
-        var result = await userService.RegisterUser(request, cancellationToken);
+        var country = Request.Headers.TryGetValue("CF-IPCountry", out var value) ? value.ToString() : "XX";
+
+        var result = await userService.RegisterUser(request, country, cancellationToken);
 
         if (result.HasError<AlreadyExistsError>())
             return TypedResults.Conflict();

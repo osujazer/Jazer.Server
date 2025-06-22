@@ -5,7 +5,7 @@ namespace Jazer.Server.Services;
 
 public interface IUserService
 {
-    Task<Result<int>> RegisterUser(RegisterUserRequest request, CancellationToken cancellationToken = default);
+    Task<Result<int>> RegisterUser(RegisterUserRequest request, string country, CancellationToken cancellationToken = default);
     
     Task<Result<LoginUserResponse>> Login(LoginUserRequest request, CancellationToken cancellationToken = default);
     

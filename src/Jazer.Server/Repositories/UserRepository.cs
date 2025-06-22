@@ -6,13 +6,14 @@ namespace Jazer.Server.Repositories;
 
 internal sealed class UserRepository(JazerDbContext dbContext) : IUserRepository
 {
-    public async Task<int> Add(string username, string email, string hashedPassword, CancellationToken cancellationToken = default)
+    public async Task<int> Add(string username, string email, string hashedPassword, string countryCode, CancellationToken cancellationToken = default)
     {
         var user = new User
         {
             Username = username,
             Email = email,
             HashedPassword = hashedPassword,
+            CountryCode = countryCode,
             CreatedAt = DateTimeOffset.UtcNow,
         };
         

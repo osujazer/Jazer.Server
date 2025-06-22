@@ -25,6 +25,9 @@ public class User
     [Column("hashed_password")]
     [MaxLength(120)]
     public required string HashedPassword { get; init; }
+
+    [Column("country_code", TypeName = "char(2)")]
+    public required string CountryCode { get; init; }
     
     [Column("created_at")]
     public required DateTimeOffset CreatedAt { get; init; }

@@ -23,7 +23,7 @@ public sealed class UserService(
 {
     private readonly Settings _settings = options.Value;
 
-    public async Task<Result<int>> RegisterUser(RegisterUserRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<int>> RegisterUser(RegisterUserRequest request, string country, CancellationToken cancellationToken = default)
     {
         var validationResult = await registerUserRequestValidator.ValidateAsync(request, cancellationToken);
 
@@ -40,6 +40,7 @@ public sealed class UserService(
             request.Username,
             request.Email,
             hashedPassword,
+            country,
             cancellationToken);
 
         return userId;

@@ -84,7 +84,7 @@ public class LoginUserTests : BaseIntegrationTest
             Password = "some-password",
         };
 
-        await _userService.RegisterUser(registerRequest);
+        await _userService.RegisterUser(registerRequest, country: "GB");
 
         var request = new LoginUserRequest
         {
@@ -114,7 +114,7 @@ public class LoginUserTests : BaseIntegrationTest
             Password = password,
         };
 
-        await _userService.RegisterUser(registerRequest);
+        await _userService.RegisterUser(registerRequest, country: "GB");
 
         var request = new LoginUserRequest
         {
@@ -143,7 +143,7 @@ public class LoginUserTests : BaseIntegrationTest
             Password = password,
         };
 
-        await _userService.RegisterUser(registerRequest);
+        await _userService.RegisterUser(registerRequest, country: "GB");
 
         var request = new LoginUserRequest
         {
@@ -172,7 +172,7 @@ public class LoginUserTests : BaseIntegrationTest
             Password = password,
         };
 
-        var userIdResult = await _userService.RegisterUser(registerRequest);
+        var userIdResult = await _userService.RegisterUser(registerRequest, country: "GB");
 
         var request = new LoginUserRequest
         {

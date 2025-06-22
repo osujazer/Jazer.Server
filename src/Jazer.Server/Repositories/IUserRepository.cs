@@ -4,7 +4,7 @@ namespace Jazer.Server.Repositories;
 
 public interface IUserRepository
 {
-    Task<int> Add(string username, string email, string hashedPassword, CancellationToken cancellationToken = default);
+    Task<int> Add(string username, string email, string hashedPassword, string countryCode, CancellationToken cancellationToken = default);
 
     Task<bool> UsernameExists(string username, CancellationToken cancellationToken = default);
     

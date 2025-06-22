@@ -29,7 +29,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -48,7 +48,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -67,7 +67,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -87,7 +87,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -106,7 +106,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -125,7 +125,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -144,7 +144,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -163,7 +163,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(request);
+        var result = await _userService.RegisterUser(request, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -183,7 +183,7 @@ public class RegisterUserTests : BaseIntegrationTest
             Password = "some-password",
         };
 
-        await _userService.RegisterUser(firstRequest);
+        await _userService.RegisterUser(firstRequest, country: "GB");
 
         var newRequest = new RegisterUserRequest
         {
@@ -193,7 +193,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(newRequest);
+        var result = await _userService.RegisterUser(newRequest, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -213,7 +213,7 @@ public class RegisterUserTests : BaseIntegrationTest
             Password = "some-password",
         };
 
-        await _userService.RegisterUser(firstRequest);
+        await _userService.RegisterUser(firstRequest, country: "GB");
 
         var newRequest = new RegisterUserRequest
         {
@@ -223,7 +223,7 @@ public class RegisterUserTests : BaseIntegrationTest
         };
         
         // Act
-        var result = await _userService.RegisterUser(newRequest);
+        var result = await _userService.RegisterUser(newRequest, country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -240,7 +240,8 @@ public class RegisterUserTests : BaseIntegrationTest
                 Username = "user-in-db",
                 Email = "user-in-db@gmail.com",
                 Password = "some-password",
-            });
+            },
+            country: "GB");
         
         // Assert
         result.IsSuccess.Should().BeTrue();
