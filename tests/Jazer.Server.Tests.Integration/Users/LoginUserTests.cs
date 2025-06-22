@@ -54,7 +54,7 @@ public class LoginUserTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task LoginUser_UserDoesNotExist_ReturnsNotFoundError()
+    public async Task LoginUser_UserDoesNotExist_ReturnsAuthenticationError()
     {
         // Arrange
         var request = new LoginUserRequest
@@ -68,11 +68,11 @@ public class LoginUserTests : BaseIntegrationTest
         
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.HasError<NotFoundError>().Should().BeTrue();
+        result.HasError<AuthenticationError>().Should().BeTrue();
     }
 
     [Fact]
-    public async Task LoginUser_IncorrectPassword_ReturnsNotFoundError()
+    public async Task LoginUser_IncorrectPassword_ReturnsAuthenticationError()
     {
         // Arrange
         const string username = "wrong-pass";
@@ -97,7 +97,7 @@ public class LoginUserTests : BaseIntegrationTest
         
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.HasError<NotFoundError>().Should().BeTrue();
+        result.HasError<AuthenticationError>().Should().BeTrue();
     }
 
     [Fact]

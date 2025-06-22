@@ -39,7 +39,7 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
     }
     
     [Fact]
-    public async Task LoginUserWithRefreshToken_RefreshTokenDoesNotExist_ReturnsNotFoundError()
+    public async Task LoginUserWithRefreshToken_RefreshTokenDoesNotExist_ReturnsAuthenticationError()
     {
         // Arrange
         var request = new LoginUserWithRefreshTokenRequest
@@ -52,11 +52,11 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.HasError<NotFoundError>().Should().BeTrue();
+        result.HasError<AuthenticationError>().Should().BeTrue();
     }
 
     [Fact]
-    public async Task LoginUserWithRefreshToken_RefreshTokenExpired_ReturnsNotFoundError()
+    public async Task LoginUserWithRefreshToken_RefreshTokenExpired_ReturnsAuthenticationError()
     {
         // Arrange
         const string username = "expired-token";
@@ -85,7 +85,7 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
         
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.HasError<NotFoundError>().Should().BeTrue();
+        result.HasError<AuthenticationError>().Should().BeTrue();
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
     {
         // Arrange
         const string username = "valid-token";
-        const string refreshToken = "refresh-token";
+        const string refreshToken = "valid-token";
 
         var userResult = await _userService.RegisterUser(
             new RegisterUserRequest
@@ -125,7 +125,7 @@ public class LoginUserWithRefreshTokenTests : BaseIntegrationTest
     {
         // Arrange
         const string username = "updated-in-db";
-        const string refreshToken = "refresh-token";
+        const string refreshToken = "updated-in-db";
 
         var userResult = await _userService.RegisterUser(
             new RegisterUserRequest
