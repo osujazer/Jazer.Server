@@ -14,6 +14,7 @@ namespace Jazer.Server.Services;
 public sealed class UserService(
     IUserRepository userRepository,
     IRefreshTokenRepository refreshTokenRepository,
+    IUserStatisticsRepository userStatisticsRepository,
     IPasswordHasher passwordHasher,
     TokenProvider tokenProvider,
     IValidator<RegisterUserRequest> registerUserRequestValidator,
@@ -42,6 +43,8 @@ public sealed class UserService(
             hashedPassword,
             country,
             cancellationToken);
+        
+        await userStatisticsRepository.Add(userId, cancellationToken);
 
         return userId;
     }

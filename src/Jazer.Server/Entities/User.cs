@@ -43,4 +43,8 @@ public class User
     public IReadOnlyCollection<UserInfraction> UserInfractions { get; init; } = null!;
 
     public IReadOnlyCollection<UserInfraction> UserInfractionsAssigned { get; init; } = null!;
+
+    public UserStatistics UserStatistics { get; init; } = null!;
+
+    public UserPeakRank? UserPeakRank { get; init; }
 }

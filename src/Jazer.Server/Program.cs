@@ -80,6 +80,7 @@ builder.Services.AddWasabi(config =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IUserStatisticsRepository, UserStatisticsRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStorageService, WasabiStorageService>();

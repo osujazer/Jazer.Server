@@ -15,4 +15,10 @@ public class User
     
     [JsonPropertyName("country_code")]
     public required string CountryCode { get; init; }
+    
+    [JsonPropertyName("statistics")]
+    public required UserStatistics Statistics { get; init; }
+    
+    [JsonPropertyName("peak_rank")]
+    public UserPeakRank? PeakRank { get; init; }
 }

@@ -17,6 +17,10 @@ public class JazerDbContext(DbContextOptions<JazerDbContext> options) : DbContex
 
     public DbSet<UserInfraction> UserInfractions { get; init; }
     
+    public DbSet<UserStatistics> UserStatistics { get; init; }
+    
+    public DbSet<UserPeakRank> UserPeakRanks { get; init; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<RefreshToken>()
@@ -68,5 +72,15 @@ public class JazerDbContext(DbContextOptions<JazerDbContext> options) : DbContex
             .HasPrincipalKey(user => user.Id)
             .HasForeignKey(userInfraction => userInfraction.AssignedByUserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<UserStatistics>()
+            .HasOne(userStatistics => userStatistics.User)
+            .WithOne(user => user.UserStatistics)
+            .HasForeignKey<UserStatistics>(userStatistics => userStatistics.UserId);
+        
+        modelBuilder.Entity<UserPeakRank>()
+            .HasOne(userPeakRank => userPeakRank.User)
+            .WithOne(user => user.UserPeakRank)
+            .HasForeignKey<UserPeakRank>(userPeakRank => userPeakRank.UserId);
     }
 }
